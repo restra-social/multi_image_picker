@@ -58,10 +58,11 @@ class MultiImagePicker {
   ///
   /// The actual image data is sent via BinaryChannel.
   static Future<bool> requestThumbnail(
-      String identifier, int width, int height) async {
+      String identifier, int width, int height, int quality) async {
     assert(identifier != null);
     assert(width != null);
     assert(height != null);
+    assert(quality != null);
 
     if (width != null && width < 0) {
       throw new ArgumentError.value(width, 'width cannot be negative');
@@ -71,11 +72,16 @@ class MultiImagePicker {
       throw new ArgumentError.value(height, 'height cannot be negative');
     }
 
+    if (quality != null && quality < 0) {
+      throw new ArgumentError.value(quality, 'quality cannot be negative');
+    }
+
     bool ret =
         await _channel.invokeMethod("requestThumbnail", <String, dynamic>{
       "identifier": identifier,
       "width": width,
       "height": height,
+          "quality": quality,
     });
     return ret;
   }

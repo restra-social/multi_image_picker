@@ -104,9 +104,10 @@ class Asset {
   ///
   /// Once you don't need this thumb data it is a good practice to release it,
   /// by calling releaseThumb() method.
-  Future<dynamic> requestThumbnail(int width, int height) async {
+  Future<dynamic> requestThumbnail(int width, int height, int quality) async {
     assert(width != null);
     assert(height != null);
+    assert(quality != null);
 
     if (width != null && width < 0) {
       throw new ArgumentError.value(width, 'width cannot be negative');
@@ -123,7 +124,7 @@ class Asset {
       BinaryMessages.setMessageHandler(_channel, null);
     });
 
-    MultiImagePicker.requestThumbnail(_identifier, width, height);
+    MultiImagePicker.requestThumbnail(_identifier, width, height, quality);
     return completer.future;
   }
 

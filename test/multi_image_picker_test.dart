@@ -88,7 +88,7 @@ void main() {
       const int width = 100;
       const int height = 200;
       test('accepts correct params', () async {
-        await MultiImagePicker.requestThumbnail(id, width, height);
+        await MultiImagePicker.requestThumbnail(id, width, height, 20);
 
         expect(
           log,
@@ -104,12 +104,17 @@ void main() {
 
       test('does not accept a negative width or height', () {
         expect(
-          MultiImagePicker.requestThumbnail(id, -100, height),
+          MultiImagePicker.requestThumbnail(id, -100, height, 20),
           throwsArgumentError,
         );
 
         expect(
-          MultiImagePicker.requestThumbnail(id, width, -100),
+          MultiImagePicker.requestThumbnail(id, width, -100, 20),
+          throwsArgumentError,
+        );
+
+        expect(
+          MultiImagePicker.requestThumbnail(id, width, height, -20),
           throwsArgumentError,
         );
       });

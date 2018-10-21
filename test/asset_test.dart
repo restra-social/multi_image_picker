@@ -30,12 +30,12 @@ void main() {
       Asset asset = Asset('_identifier', 50, 50);
 
       expect(
-        asset.requestThumbnail(-100, 10),
+        asset.requestThumbnail(-100, 10, 20),
         throwsArgumentError,
       );
 
       expect(
-        asset.requestThumbnail(10, -100),
+        asset.requestThumbnail(10, -100, 20),
         throwsArgumentError,
       );
     });

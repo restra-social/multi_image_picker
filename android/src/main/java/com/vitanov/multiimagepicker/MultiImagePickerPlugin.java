@@ -99,14 +99,16 @@ public class MultiImagePickerPlugin implements MethodCallHandler, PluginRegistry
         String identifier;
         int width;
         int height;
+        int quality;
 
-        public GetThumbnailTask(BinaryMessenger messenger, String identifier, String path, int width, int height) {
+        public GetThumbnailTask(BinaryMessenger messenger, String identifier, String path, int width, int height, int quality) {
             super();
             this.messenger = messenger;
             this.identifier = identifier;
             this.path = path;
             this.width = width;
             this.height = height;
+            this.quality = quality;
         }
 
         @Override
@@ -115,7 +117,7 @@ public class MultiImagePickerPlugin implements MethodCallHandler, PluginRegistry
             bitmapOptions.inSampleSize = 10;
             Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(this.path, bitmapOptions), this.width, this.height, OPTIONS_RECYCLE_INPUT);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
             byte[] byteArray = stream.toByteArray();
             bitmap.recycle();
 
@@ -194,10 +196,11 @@ public class MultiImagePickerPlugin implements MethodCallHandler, PluginRegistry
             String identifier = call.argument("identifier");
             Integer width = call.argument("width");
             Integer height = call.argument("height");
+            Integer quality = call.argument("quality");
             Uri uri = Uri.parse(identifier);
             String path = getDataColumn(this.context, uri, null, null);
 
-            GetThumbnailTask task = new GetThumbnailTask(this.messenger, identifier, path, width, height);
+            GetThumbnailTask task = new GetThumbnailTask(this.messenger, identifier, path, width, height, quality);
             task.execute("");
             finishWithSuccess(true);
         } else if (REFRESH_IMAGE.equals(call.method)) {
